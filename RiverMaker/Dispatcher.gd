@@ -18,6 +18,8 @@ var _group_size: Vector3i
 
 var _bindings: Array[RDUniform] = []
 
+@onready var _rand := RandomNumberGenerator.new()
+
 func _set_image_size(image_size: Vector2i) -> void:
 	_image_size = image_size
 	_group_size = Vector3i(
@@ -42,7 +44,9 @@ func _get_distributed_vectors() -> PackedInt32Array:
 	# Make distributed randomly
 	for gy in _group_size.y:
 		for gx in _group_size.x:
-			vectors_as_ints.append_array([gx, gy])
+			var point_x: int = gx * _GLSL_LOCAL_SIZE.x + _rand.randi_range(0, _GLSL_LOCAL_SIZE.x - 1)
+			var point_y: int = gy * _GLSL_LOCAL_SIZE.y + _rand.randi_range(0, _GLSL_LOCAL_SIZE.y - 1)
+			vectors_as_ints.append_array([point_x, point_y])
 			
 	return vectors_as_ints
 
