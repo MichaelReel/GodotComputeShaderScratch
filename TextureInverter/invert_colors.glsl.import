@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://dl08gva0gli3c"
+path="res://.godot/imported/invert_colors.glsl-9e07f292e75b9b7b42fae4d131744d2a.res"
+
+[deps]
+
+source_file="res://TextureInverter/invert_colors.glsl"
+dest_files=["res://.godot/imported/invert_colors.glsl-9e07f292e75b9b7b42fae4d131744d2a.res"]
+
+[params]
+

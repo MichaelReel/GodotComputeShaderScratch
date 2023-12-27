@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bogw8kgb7ucfr"]
+
+[ext_resource type="Script" path="res://GodotDocs/Dispatcher.gd" id="1_c8vee"]
+[ext_resource type="Script" path="res://GodotDocs/main.gd" id="1_et573"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_et573")
+
+[node name="Dispatcher" type="Node" parent="."]
+script = ExtResource("1_c8vee")

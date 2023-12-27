@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://bai5no07rj5uw"]
+
+[ext_resource type="Script" path="res://TextureInverter/Inverter.gd" id="1_bpdwe"]
+[ext_resource type="Script" path="res://TextureInverter/Dispatcher.gd" id="2_2jofb"]
+
+[sub_resource type="Gradient" id="Gradient_7f2pr"]
+offsets = PackedFloat32Array(0, 0.220418, 0.241299, 0.417633, 0.598608, 0.856148, 1)
+colors = PackedColorArray(0, 0, 0.65098, 1, 0.036852, 0.0315874, 0.588558, 1, 0.384314, 0.329412, 0, 1, 0, 0.431373, 0.14902, 1, 0.127575, 0.264869, 0.176103, 1, 0.29613, 0.343192, 0.3131, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_nmcqn"]
+noise_type = 2
+frequency = 0.1
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8n6lw"]
+width = 128
+height = 88
+generate_mipmaps = false
+color_ramp = SubResource("Gradient_7f2pr")
+noise = SubResource("FastNoiseLite_nmcqn")
+
+[node name="Inverter" type="TextureRect"]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_8n6lw")
+script = ExtResource("1_bpdwe")
+
+[node name="Dispatcher" type="Node" parent="." node_paths=PackedStringArray("_renderer")]
+script = ExtResource("2_2jofb")
+_compute_shader = "res://TextureInverter/invert_colors.glsl"
+_renderer = NodePath("..")

@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddr6qtwy1pesd"]
+
+[ext_resource type="Script" path="res://pascal-ballet/addons/compute_shader_studio/compute_shader_studio_2d.gd" id="1_6846p"]
+[ext_resource type="Texture2D" uid="uid://dvbksn14dw7w" path="res://icon.svg" id="2_s3fct"]
+
+[node name="CompShadStudioEx1" type="Node2D"]
+
+[node name="ComputeShaderStudio2D2" type="Node" parent="." node_paths=PackedStringArray("data")]
+script = ExtResource("1_6846p")
+data = [NodePath("../Matrix1"), NodePath("../Matrix2")]
+
+[node name="Matrix1" type="Sprite2D" parent="."]
+position = Vector2(294, 315)
+scale = Vector2(3.27344, 3.02344)
+texture = ExtResource("2_s3fct")
+
+[node name="Matrix2" type="Sprite2D" parent="."]
+position = Vector2(843, 317)
+scale = Vector2(3.27344, 3.02344)
+texture = ExtResource("2_s3fct")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 395.0
+offset_top = 3.0
+offset_right = 626.0
+offset_bottom = 62.0
+scale = Vector2(1.72, 1.72)
+text = "Compute Shader Studio
+Example 1"
+horizontal_alignment = 1
+vertical_alignment = 1

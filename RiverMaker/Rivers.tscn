@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://q0kpcg524irv"]
+
+[ext_resource type="Script" path="res://RiverMaker/Rivers.gd" id="1_ucetl"]
+[ext_resource type="Script" path="res://RiverMaker/Dispatcher.gd" id="2_ce4dt"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bdhsx"]
+frequency = 0.03
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1gtjl"]
+width = 120
+height = 80
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_bdhsx")
+
+[node name="Rivers" type="TextureRect"]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_1gtjl")
+stretch_mode = 4
+script = ExtResource("1_ucetl")
+
+[node name="Dispatcher" type="Node" parent="." node_paths=PackedStringArray("_renderer")]
+script = ExtResource("2_ce4dt")
+_compute_shader = "res://RiverMaker/rivers.glsl"
+_renderer = NodePath("..")
