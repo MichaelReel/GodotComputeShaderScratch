@@ -4,9 +4,8 @@ extends Node
 @export_file("*.glsl") var _compute_shader: String
 @export var _renderer: TextureRect
 
-const _GLSL_LOCAL_SIZE: Vector3i = Vector3i(8, 8, 1)  # Would be nice to extract from the glsl
-
 var _rd: RenderingDevice
+var _glsl_local_size: Vector3i 
 var _shader: RID
 var _buffer: RID
 var _input_texure: RID
@@ -27,6 +26,8 @@ func _create_local_rendering_device() -> void:
 		printerr("Compute shaders are not available")
 
 func _load_glsl_shader() -> void:
+	_glsl_local_size = _get_layout_from_glsl(_compute_shader)
+	
 	var shader_file: RDShaderFile = load(_compute_shader) as RDShaderFile
 	var shader_spirv: RDShaderSPIRV = shader_file.get_spirv()
 	_shader = _rd.shader_create_from_spirv(shader_spirv)
@@ -97,9 +98,9 @@ func _create_compute_pipeline() -> void:
 	var compute_list: int = _rd.compute_list_begin()
 	_rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
 	_rd.compute_list_bind_uniform_set(compute_list, _uniform_set, 0)
-	var groups_x : int = _image_size.x / _GLSL_LOCAL_SIZE.x
-	var groups_y : int = _image_size.y / _GLSL_LOCAL_SIZE.y
-	_rd.compute_list_dispatch(compute_list, groups_x, groups_y, _GLSL_LOCAL_SIZE.z)
+	var groups_x : int = _image_size.x / _glsl_local_size.x
+	var groups_y : int = _image_size.y / _glsl_local_size.y
+	_rd.compute_list_dispatch(compute_list, groups_x, groups_y, _glsl_local_size.z)
 	_rd.compute_list_end()
 
 func _submit_to_gpu_and_sync() -> void:
@@ -127,5 +128,22 @@ func dispatch() -> void:
 	_create_compute_pipeline()
 	_submit_to_gpu_and_sync()
 	_extract_output_data()
+
+#endregion
+
+#region text tools
+
+func _get_layout_from_glsl(path: String) -> Vector3i:
+	var regex: RegEx = RegEx.create_from_string(r"layout\(local_size_x\s*=\s*(\d+)\s*,\s*local_size_y\s*=\s*(\d+)\s*,\s*local_size_z\s*=\s*(\d+)\s*\)")
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	var content: String = file.get_as_text()
+	
+	var result: RegExMatch = regex.search(content)
+	
+	return Vector3i(
+		int(result.strings[1]),
+		int(result.strings[2]),
+		int(result.strings[3]),
+	)
 
 #endregion
